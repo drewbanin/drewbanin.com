@@ -1,0 +1,60 @@
+
+.data-grid-container .data-grid {
+    width: calc(100%);
+    background: none;
+    display: block;
+}
+
+.data-grid {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+}
+
+.data-grid tbody {
+    width: 100%;
+    display: table;
+    height: 100%;
+}
+
+.data-grid tbody tr {
+    width: 100%;
+    height: calc(100% / 32);
+}
+
+.data-grid tbody tr td {
+    width: calc(100% / 24);
+    height: calc(100% / 32);
+}
+
+.data-grid-container .data-grid .cell:not(:first-child) {
+    text-align: left;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 1px 4px;
+
+    text-overflow: initial;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+/* Row headers */
+.data-grid-container .data-grid tbody tr:first-child td {
+    text-align: center !important;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #eee !important;
+    color: black !important;
+}
+
+/* Col headers */
+.data-grid-container .data-grid tbody tr td:first-child {
+    text-align: center !important;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #eee !important;
+    color: black !important;
+}
