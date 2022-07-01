@@ -66,7 +66,6 @@ export default class Sheet extends React.Component {
       const grid = this.state.grid;
 
       const numrows = 32;
-      const numcols = 28;
 
       const scaleFrom = 256;
       const scaleTo = 12;
@@ -74,15 +73,6 @@ export default class Sheet extends React.Component {
       let histCells = [];
 
       let chunked = _.chunk(fftBuffer, 2);
-
-      function componentToHex(c) {
-        var hex = c.toString(16);
-        return hex.length === 1 ? "0" + hex : hex;
-      }
-
-      function rgbToHex(r, g, b) {
-        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-      }
 
       _.each(chunked, (amplitudes, i) => {
           let amplitudeAvg = _.mean(amplitudes);
@@ -179,9 +169,9 @@ export default class Sheet extends React.Component {
           this.typeLyrics(cell, lyric);
       }
 
-      if (lyric.value == 'edge' || lyric.value == 'edge.') {
+      if (lyric.value === 'edge' || lyric.value === 'edge.') {
           this.lostEdges += 1;
-      } else if (lyric.value == 'there' || lyric.value == 'there.') {
+      } else if (lyric.value === 'there' || lyric.value === 'there.') {
           this.timesIWasThere += 1;
       }
 

@@ -1,6 +1,5 @@
 
 import Lyrics from './lyrics.json';
-import _ from 'lodash';
 
 export default class Player {
     constructor(onLyric, onTick) {
