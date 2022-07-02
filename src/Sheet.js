@@ -7,7 +7,7 @@ import './App.css';
 
 const alphabet = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const numRows = 32;
-const numCols = window.screen.width > 600 ? 26 : 6;
+const numCols = window.screen.width > 600 ? 22 : 7;
 
 let grid = _.map(_.range(numRows), (r) => {
     return _.map(_.range(numCols), (c) => {
@@ -46,11 +46,6 @@ export default class Sheet extends React.Component {
     this.colNumber = 0;
     this.histCells = [];
 
-    this.lostEdges = 0;
-    this.timesIWasThere = 0;
-
-    this.title = [];
-
     this.player = props.player;
     this.player.onLyric = this.onLyric;
     this.player.onTick = this.onTick;
@@ -69,13 +64,19 @@ export default class Sheet extends React.Component {
 
       let histCells = [];
 
-      let chunked = _.chunk(fftBuffer, 2);
+      let chunkSize = Math.floor(64 / (numCols));
+      let chunked = _.chunk(fftBuffer, chunkSize);
+
+
+      let title = [];
 
       _.each(chunked, (amplitudes, i) => {
           let amplitudeAvg = _.mean(amplitudes);
           let scaledAmplitude = Math.round((amplitudeAvg / scaleFrom) * scaleTo);
           //console.log(i, scaledAmplitude);
           let col = i + 1;
+
+          title.push(scaledAmplitude);
 
           for (let rowNum=0; rowNum < scaleTo; rowNum++) {
               let row = grid[numRows - rowNum - 1];
@@ -105,8 +106,30 @@ export default class Sheet extends React.Component {
                   }
               }
           }
-
       })
+
+      let titleMsg = _.map(_.take(title, 12), (amplitude) => {
+          if (amplitude === 0) {
+            return '▁';
+          } else if (amplitude < 2) { 
+            return '▂';
+          } else if (amplitude < 4) { 
+            return '▃';
+          } else if (amplitude < 6) { 
+            return '▄';
+          } else if (amplitude < 8) { 
+            return '▅';
+          } else if (amplitude < 10) { 
+            return '▆';
+          } else if (amplitude < 12) { 
+            return '▇';
+          } else {
+            return '█';
+          }
+      })
+
+      document.title = titleMsg.join("");
+
       this.histCells = histCells;
       this.setState({ grid });
   }
@@ -123,16 +146,12 @@ export default class Sheet extends React.Component {
   }
 
   typeLyrics = (cell, lyric) => {
-      _.each(lyric.value, (letter, i) => {
-          cell.style = lyric.style;
-          setTimeout(() => {
-            cell.value = _.take(lyric.value, i + 1).join("");
-          }, 50 * i);
-      })
+      cell.style = lyric.style;
+      cell.value = lyric.value;
   }
 
   onLyric = lyric => {
-      const numLines = 10;
+      const numLines = 15;
 
       if (lyric.newline) {
           this.lineNumber += 1;
@@ -162,29 +181,10 @@ export default class Sheet extends React.Component {
 
       if (cell) {
           cell.selected = true;
-          this.title.push(lyric.value);
-          document.title = this.title.join(" ");
           this.typeLyrics(cell, lyric);
       }
 
-      if (lyric.value === 'edge' || lyric.value === 'edge.') {
-          this.lostEdges += 1;
-      } else if (lyric.value === 'there' || lyric.value === 'there.') {
-          this.timesIWasThere += 1;
-      }
-
       this.lastCell = cell;
-
-      if (this.lostEdges > 0) {
-          grid[15][1].value = 'lost edges'
-          grid[15][1].bold = true;
-          grid[15][2].value = this.lostEdges;
-      }
-      if (this.timesIWasThere > 0) {
-          grid[16][1].value = 'been there'
-          grid[16][1].bold = true;
-          grid[16][2].value = this.timesIWasThere;
-      }
 
       let render = this.state.render + 1;
       this.setState({ grid, render });

@@ -16,6 +16,7 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
     border: 0,
     cursor: 'pointer',
+    background: 'transparent',
   },
   
 };

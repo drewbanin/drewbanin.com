@@ -46,41 +46,29 @@ export default class Player {
         this.analyser = analyser;
 
         this.track.play();
-        this.loop();
+        //this.loop();
+        window.requestAnimationFrame(this.loop.bind(this));
     }
 
-    //playTrack() {
-    //    let doPlay = this.doPlayTrack.bind(this);
-    //    if (!this.playing) {
-    //        this.playing = true;
-    //        this.track.addEventListener("canplaythrough", event => {
-    //            doPlay();
-    //        })
-    //    }
-    //}
-
     loop() {
-        const self = this;
-        setInterval((e) => {
-            var bufferLength = self.analyser.frequencyBinCount;
-            var dataArray = new Uint8Array(bufferLength);
+        var bufferLength = this.analyser.frequencyBinCount;
+        var dataArray = new Uint8Array(bufferLength);
 
-            self.analyser.getByteFrequencyData(dataArray);
-            //self.analyser.getByteTimeDomainData(dataArray);
+        this.analyser.getByteFrequencyData(dataArray);
 
-            self.onTick(dataArray);
+        this.onTick(dataArray);
 
-            var t = self.track.currentTime;
-            if (self.nextLyric && t > self.nextLyric.offset) {
-                // render lyric
-                console.log("PLAY: ", self.nextLyric.value)
-                this.onLyric(self.nextLyric);
+        var t = this.track.currentTime;
+        if (this.nextLyric && t > this.nextLyric.offset) {
+            // render lyric
+            console.log("PLAY: ", this.nextLyric.value)
+            this.onLyric(this.nextLyric);
 
-                // Adjust pointer
-                self.lyricPointer += 1;
-                self.nextLyric = Lyrics[self.lyricPointer];
-            }
+            // Adjust pointer
+            this.lyricPointer += 1;
+            this.nextLyric = Lyrics[this.lyricPointer];
+        }
 
-        }, 5)
+        window.requestAnimationFrame(this.loop.bind(this));
     }
 }
