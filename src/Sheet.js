@@ -64,9 +64,13 @@ export default class Sheet extends React.Component {
 
       let histCells = [];
 
-      let chunkSize = Math.floor(64 / (numCols));
+      let chunkSize;
+      if (numCols < 10) {
+          chunkSize = 4;
+      } else {
+          chunkSize = 1;
+      }
       let chunked = _.chunk(fftBuffer, chunkSize);
-
 
       let title = [];
 
