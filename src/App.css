@@ -25,11 +25,20 @@
     height: calc(100% / 32);
 }
 
-.data-grid tbody tr td {
-    width: calc(100% / 24);
-    height: calc(100% / 32);
+
+@media only screen and (max-width: 600px) {
+    .data-grid tbody tr td {
+        width: calc(100% / 12);
+        height: calc(100% / 32);
+    }
 }
 
+@media only screen and (min-width: 600px) {
+    .data-grid tbody tr td {
+        width: calc(100% / 24);
+        height: calc(100% / 32);
+    }
+}
 .data-grid-container .data-grid .cell:not(:first-child) {
     text-align: left;
     font-size: 12px;
@@ -48,6 +57,8 @@
     font-family: Arial, Helvetica, sans-serif;
     background-color: #eee !important;
     color: black !important;
+    min-width: 32px;
+    max-width: 32px !important;
 }
 
 /* Col headers */
@@ -57,4 +68,5 @@
     font-family: Arial, Helvetica, sans-serif;
     background-color: #eee !important;
     color: black !important;
+    min-width: 32px;
 }

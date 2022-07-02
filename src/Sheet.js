@@ -6,8 +6,11 @@ import 'react-datasheet/lib/react-datasheet.css';
 import './App.css';
 
 const alphabet = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-let grid = _.map(_.range(29), (r) => {
-    return _.map(_.range(20), (c) => {
+const numRows = 32;
+const numCols = window.screen.width > 600 ? 26 : 6;
+
+let grid = _.map(_.range(numRows), (r) => {
+    return _.map(_.range(numCols), (c) => {
         const isHeaderRow = r === 0;
         const isHeaderCol = c === 0;
 
@@ -61,10 +64,8 @@ export default class Sheet extends React.Component {
   onTick = fftBuffer => {
       const grid = this.state.grid;
 
-      const numrows = 32;
-
       const scaleFrom = 256;
-      const scaleTo = 12;
+      const scaleTo = 14;
 
       let histCells = [];
 
@@ -77,7 +78,7 @@ export default class Sheet extends React.Component {
           let col = i + 1;
 
           for (let rowNum=0; rowNum < scaleTo; rowNum++) {
-              let row = grid[numrows - rowNum - 1];
+              let row = grid[numRows - rowNum - 1];
               if (!row) {
                   continue;
               }
@@ -139,7 +140,8 @@ export default class Sheet extends React.Component {
           this.title = [];
       }
 
-      if (this.colNumber > 18) {
+      // include row header
+      if (this.colNumber >= (numCols - 1)) {
           this.lineNumber += 1;
           this.colNumber = 0;
       }
