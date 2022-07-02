@@ -2,30 +2,36 @@
 import Lyrics from './lyrics.json';
 
 export default class Player {
-    constructor(onLyric, onTick) {
-        this.track = null;
-        this.analyser = null;
-
+    constructor() {
         this.playing = false;
 
         this.lyricPointer = 0;
         this.nextLyric = Lyrics[0];
 
-        this.onTick = onTick;
-        this.onLyric = onLyric;
+        let basePath = process.env.PUBLIC_URL || '.';
+        let mp3Path = basePath + '/edge.mp3'
+        this.track = new Audio(mp3Path);
+        this.analyser = null;
+
+        this.track.oncanplaythrough = function() {
+            console.log("track loaded...");
+        };
+
     }
 
-    init() {
-        if (!this.track) {
-            let basePath = process.env.PUBLIC_URL || '.';
-            let mp3Path = basePath + '/edge.mp3'
-            this.track = new Audio(mp3Path)
-        }
-    }
+    playTrack() {
+        // this.track.currentTime = 240;
+        // _.each(Lyrics, (lyric, i) => {
+        //     if (lyric.offset < this.track.currentTime) {
+        //         this.lyricPointer = i;
+        //     }
+        //     this.nextLyric = Lyrics[this.lyricPointer];
+        // })
+        //let idk = new Audio('ping.mp3')
+        //idk.play();
 
-    doPlayTrack() {
-        var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        var analyser = audioCtx.createAnalyser();
+        let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let analyser = audioCtx.createAnalyser();
 
         analyser.fftSize = 128;
         analyser.smoothingTimeConstant = 0.7;
@@ -39,28 +45,19 @@ export default class Player {
 
         this.analyser = analyser;
 
-        // this.track.currentTime = 240;
-        // _.each(Lyrics, (lyric, i) => {
-        //     if (lyric.offset < this.track.currentTime) {
-        //         this.lyricPointer = i;
-        //     }
-        //     this.nextLyric = Lyrics[this.lyricPointer];
-        // })
-
-        this.track.play()
+        this.track.play();
         this.loop();
     }
 
-    playTrack() {
-        let doPlay = this.doPlayTrack.bind(this);
-
-        if (!this.playing) {
-            this.playing = true;
-            this.track.addEventListener("canplaythrough", event => {
-                doPlay();
-            })
-        }
-    }
+    //playTrack() {
+    //    let doPlay = this.doPlayTrack.bind(this);
+    //    if (!this.playing) {
+    //        this.playing = true;
+    //        this.track.addEventListener("canplaythrough", event => {
+    //            doPlay();
+    //        })
+    //    }
+    //}
 
     loop() {
         const self = this;

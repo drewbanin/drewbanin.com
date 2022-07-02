@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
 import Datasheet from 'react-datasheet/lib/DataSheet';
-import Player from './Tunes';
 
 import 'react-datasheet/lib/react-datasheet.css';
 import './App.css';
@@ -32,8 +31,6 @@ let grid = _.map(_.range(29), (r) => {
 })
 
 
-let musicPlayer;
-
 export default class Sheet extends React.Component {
   constructor(props) {
     super(props);
@@ -50,14 +47,13 @@ export default class Sheet extends React.Component {
     this.timesIWasThere = 0;
 
     this.title = [];
+
+    this.player = props.player;
+    this.player.onLyric = this.onLyric;
+    this.player.onTick = this.onTick;
   }
 
   componentDidMount() {
-    if (!musicPlayer) {
-        musicPlayer= new Player(this.onLyric, this.onTick);
-        musicPlayer.init();
-        musicPlayer.playTrack()
-    }
     this.onLyric = this.onLyric.bind(this);
     this.onTick = this.onTick.bind(this);
   }

@@ -1,0 +1,21 @@
+
+#shareBanner {
+    text-align: center;
+    border: 0;
+    background: white;
+    color: black;
+}
+
+/* Make it small on mobile */
+@media only screen and (max-width: 600px) {
+  #shareBanner {
+    width: 300px;
+  }
+}
+
+/* Make it big on desktop */
+@media only screen and (min-width: 600px) {
+  #shareBanner {
+    width: 480px;
+  }
+}

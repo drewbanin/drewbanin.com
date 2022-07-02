@@ -1,5 +1,10 @@
 import React from 'react';
 import Modal from 'react-modal';
+import Sheet from './Sheet'
+
+import Player from './Tunes'
+
+import './Modal.css';
 
 const customStyles = {
   content: {
@@ -15,24 +20,21 @@ const customStyles = {
   
 };
 
-const imgStyle = {
-    width: '480px',
-    border: 0,
-    background: 'white',
-    color: 'black',
-}
-
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#root');
 
 let basePath = process.env.PUBLIC_URL || '.';
 let imgPath = basePath + '/start.png'
+let player = new Player();
 
 
 function ModalComponent(props) {
   const [modalIsOpen, setIsOpen] = React.useState(true);
 
   function closeModal() {
+    // play a sound in the handler to initialize webaudio....
+    player.playTrack();
+
     setIsOpen(false);
   }
 
@@ -43,9 +45,9 @@ function ModalComponent(props) {
         onRequestClose={closeModal}
         style={customStyles}
       >
-        <img style={imgStyle} alt='Get started...' src={imgPath} border="0" onClick={closeModal} />
+        <img id='shareBanner' alt='Get started...' src={imgPath} border="0" onClick={closeModal} />
       </Modal>
-      {modalIsOpen || props.children}
+      <Sheet width="100%" player={player} />
     </div>
   );
 }
