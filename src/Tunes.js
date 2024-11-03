@@ -11,6 +11,7 @@ export default class Player {
         let basePath = process.env.PUBLIC_URL || '.';
         let mp3Path = basePath + '/edge.mp3'
         this.track = new Audio(mp3Path);
+        this.track.crossOrigin = "anonymous";
         this.analyser = null;
 
         this.track.oncanplaythrough = function() {
